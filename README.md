@@ -353,6 +353,15 @@ unless Rails.env.development? || Rails.env.test?
 end
 ```
 
+The Rails `config.log_level` is assumed to be `:debug`. If you have it set to something else like `:info`, then you need to update `PutsDebuggerer.printer` to print at a different log level (e.g. `:info`) by adding the following code to the initializer above (this code is a modification of the default at `PutsDebuggerer::PRINTER_RAILS`):
+
+```ruby
+PutsDebuggerer.printer = lambda do |output| 
+  puts output if Rails.env.test?
+  Rails.logger.info(output)  
+end
+```
+
 ### Option 2: Manual
 
 Or manually install and require library.
